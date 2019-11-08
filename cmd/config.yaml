@@ -1,0 +1,36 @@
+port: 8000
+readTimeout: 5
+writeTimeout: 10
+routes:
+  - route: auth
+    loadBalanceModel: RoundRobin
+    processPlugin:
+      inBound:
+      outBound:
+      errorBound:
+    swagger: ""
+    checkHealthURL: "/health"
+    healthCheck: false
+    healthLimitTimeWindow: 60
+    healthLimitCount: 3
+    checkTicket: 10
+    requestLimitTimeWindow: 10
+    requestLimitCount: 3000
+    endpoints:
+      - http://127.0.0.1:8081
+  - route: biz
+    loadBalanceModel: RoundRobin
+    processPlugin:
+      inBound:
+      outBound:
+      errorBound:
+    swagger: ""
+    checkHealthURL: "/health"
+    healthCheck: false
+    healthLimitTimeWindow: 60
+    healthLimitCount: 3
+    checkTicket: 10
+    requestLimitTimeWindow: 10
+    requestLimitCount: 3000
+    endpoints:
+      - http://127.0.0.1:8088

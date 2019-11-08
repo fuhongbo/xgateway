@@ -1,0 +1,1386 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "v1",
+        "title": "DataAccess Service"
+    },
+    "paths": {
+        "/api/v1/objects/{objectId}/models/{modelId}/methods/{methodName}": {
+            "post": {
+                "tags": [
+                    "Commands"
+                ],
+                "operationId": "invokeMethod",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain",
+                    "application/json",
+                    "text/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "objectId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "modelId",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "methodName",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "payload",
+                        "in": "body",
+                        "required": false,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/VoidResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/data/variables": {
+            "post": {
+                "tags": [
+                    "Data"
+                ],
+                "summary": "This endpoint is used to retrieve raw and aggregate data for variables.",
+                "operationId": "queryVariables",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Request containing all required and optional parameters",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/QueryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/VariablesResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/data/alarms": {
+            "post": {
+                "tags": [
+                    "Data"
+                ],
+                "summary": "This endpoint is used to retrieve raw and aggregate data for alarms.",
+                "operationId": "queryAlarms",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Request containing all required and optional parameters",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/QueryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/AlarmsResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/data/events": {
+            "post": {
+                "tags": [
+                    "Data"
+                ],
+                "summary": "This endpoint is used to retrieve raw and aggregate data for events.",
+                "operationId": "queryEvents",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "Request containing all required and optional parameters",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/QueryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/EventsResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/storage/object/files/search": {
+            "get": {
+                "tags": [
+                    "Files"
+                ],
+                "summary": "Retrieves a list of the stored files based on unknown filename.",
+                "operationId": "searchFiles",
+                "consumes": [],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "A boolean expression used to filter the results",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the number of returned values.  Defaults to 100 if not specified.",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/FileServiceResponse[ObjectStorageFileResponse]"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/storage/object/files/download": {
+            "post": {
+                "tags": [
+                    "Files"
+                ],
+                "summary": "Downloads the requested file.",
+                "operationId": "downloadFile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain",
+                    "application/json",
+                    "text/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "The constructed request",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/ObjectStorageDownloadRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/FileStreamResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/storage/object/files/delete": {
+            "post": {
+                "tags": [
+                    "Files"
+                ],
+                "summary": "Deletes a file from object storage.",
+                "operationId": "removeFile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/ObjectStorageDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/storage/object/files/upload": {
+            "post": {
+                "tags": [
+                    "Files"
+                ],
+                "summary": "Uploads files into cold storage location with an object id",
+                "operationId": "uploadFile",
+                "consumes": [],
+                "produces": [
+                    "text/plain",
+                    "application/json",
+                    "text/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "query",
+                        "description": "File to upload",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "ObjectId",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Model",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Path",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/storage/global/files/search": {
+            "get": {
+                "tags": [
+                    "GlobalStorage"
+                ],
+                "summary": "Retrieves a list of the stored files in global storage.",
+                "operationId": "searchGlobalFiles",
+                "consumes": [],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "A boolean expression used to filter the results",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "Limit the number of returned values.  Defaults to 100 if not specified.",
+                        "required": false,
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/FileServiceResponse[GlobalStorageFileResponse]"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/storage/global/files/download": {
+            "post": {
+                "tags": [
+                    "GlobalStorage"
+                ],
+                "summary": "Downloads the requested file from global storage.",
+                "operationId": "downloadGlobalFile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain",
+                    "application/json",
+                    "text/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "The constructed request",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/GlobalStorageDownloadRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/FileStreamResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/storage/global/files/delete": {
+            "post": {
+                "tags": [
+                    "GlobalStorage"
+                ],
+                "summary": "Deletes a file from global storage.",
+                "operationId": "removeGlobalFile",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/GlobalStorageDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/storage/global/files/upload": {
+            "post": {
+                "tags": [
+                    "GlobalStorage"
+                ],
+                "summary": "Uploads a file into global storage location",
+                "operationId": "uploadGlobalFile",
+                "consumes": [],
+                "produces": [
+                    "text/plain",
+                    "application/json",
+                    "text/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "file",
+                        "in": "query",
+                        "description": "File to upload",
+                        "required": false,
+						"type": "string"
+                    },
+                    {
+                        "name": "Path",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/publishers/{id}/token": {
+            "post": {
+                "tags": [
+                    "Publisher"
+                ],
+                "operationId": "createToken",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "text/plain",
+                    "application/json",
+                    "text/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/PublisherRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/PublisherServiceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/publishers/{id}": {
+            "get": {
+                "tags": [
+                    "Publisher"
+                ],
+                "operationId": "getPublisherState",
+                "consumes": [],
+                "produces": [
+                    "text/plain",
+                    "application/json",
+                    "text/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/PublisherDetailsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/subscriptions/{type}": {
+            "post": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Used to create a hot path subscription to servicebus to retrieve hot data based on the requested filter.",
+                "operationId": "createSubscription",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "description": "Available values are platformEvents, variables, alarms, events and corresponds to which \r\n            service bus topic in which to setup the subscription.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/CreateSubscriptionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/SubscriptionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/subscriptions/{type}/{subscriptionId}": {
+            "put": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Provides the ability to get a refreshed new sas token",
+                "operationId": "updateSubscription",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "description": "Available values are platformEvents, variables, alarms, events and corresponds to which \r\n            service bus topic from which to get the refreshed token.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "subscriptionId",
+                        "in": "path",
+                        "description": "Existing subscription.  Passed in to check for existence.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "request",
+                        "in": "body",
+                        "description": "The subscription request model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/SubscriptionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/SubscriptionUpdateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Subscriptions"
+                ],
+                "summary": "Deletes a subscription from servicebus.",
+                "operationId": "deleteSubscription",
+                "consumes": [],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "description": "Available values are platformEvents, variables, alarms, events and corresponds to which \r\n            service bus topic in which to setup the subscription.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "subscriptionId",
+                        "in": "path",
+                        "description": "Id of the subscription. Will be a GUID.",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/VoidResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "VoidResponse": {
+            "type": "object",
+            "properties": {}
+        },
+        "ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/IServiceError"
+                    }
+                }
+            }
+        },
+        "IServiceError": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "detail": {
+                    "type": "string"
+                }
+            }
+        },
+        "QueryRequest": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "$ref": "#/definitions/QueryDate"
+                },
+                "filter": {
+                    "type": "string"
+                },
+                "select": {
+                    "$ref": "#/definitions/QuerySelect"
+                },
+                "groupBy": {
+                    "$ref": "#/definitions/QueryGroupBy"
+                },
+                "orderBy": {
+                    "$ref": "#/definitions/QueryOrderBy"
+                },
+                "limit": {
+                    "format": "int32",
+                    "type": "integer"
+                }
+            }
+        },
+        "QueryDate": {
+            "type": "object",
+            "properties": {
+                "from": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            }
+        },
+        "QuerySelect": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "string"
+                },
+                "min": {
+                    "type": "string"
+                },
+                "max": {
+                    "type": "string"
+                },
+                "avg": {
+                    "type": "string"
+                },
+                "sum": {
+                    "type": "string"
+                },
+                "first": {
+                    "type": "string"
+                },
+                "last": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "string"
+                }
+            }
+        },
+        "QueryGroupBy": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "properties": {
+                    "type": "string"
+                }
+            }
+        },
+        "QueryOrderBy": {
+            "type": "object",
+            "properties": {
+                "property": {
+                    "type": "string"
+                },
+                "order": {
+                    "type": "string"
+                }
+            }
+        },
+        "VariablesResponseModel": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "AlarmsResponseModel": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "EventsResponseModel": {
+            "type": "object",
+            "properties": {
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "type": "object"
+                    }
+                }
+            }
+        },
+        "FileServiceResponse[ObjectStorageFileResponse]": {
+            "type": "object",
+            "properties": {
+                "hasMore": {
+                    "type": "boolean"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ObjectStorageFileResponse"
+                    }
+                }
+            }
+        },
+        "ObjectStorageFileResponse": {
+            "type": "object",
+            "properties": {
+                "objectId": {
+                    "type": "string"
+                },
+                "model": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "ObjectStorageDownloadRequest": {
+            "type": "object",
+            "properties": {
+                "objectId": {
+                    "description": "ObjectId of the file",
+                    "type": "string"
+                },
+                "model": {
+                    "description": "Model (e.g. abb.ability.device)",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "Exact path of the file (e.g. /foo/bar/file.bak)",
+                    "type": "string"
+                }
+            }
+        },
+        "FileStreamResult": {
+            "type": "object",
+            "properties": {
+                "fileStream": {
+                    "$ref": "#/definitions/Stream"
+                },
+                "contentType": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "fileDownloadName": {
+                    "type": "string"
+                },
+                "lastModified": {
+                    "format": "date-time",
+                    "type": "string"
+                },
+                "entityTag": {
+                    "$ref": "#/definitions/EntityTagHeaderValue"
+                }
+            }
+        },
+        "Stream": {
+            "type": "object",
+            "properties": {
+                "canRead": {
+                    "type": "boolean",
+                    "readOnly": true
+                },
+                "canSeek": {
+                    "type": "boolean",
+                    "readOnly": true
+                },
+                "canTimeout": {
+                    "type": "boolean",
+                    "readOnly": true
+                },
+                "canWrite": {
+                    "type": "boolean",
+                    "readOnly": true
+                },
+                "length": {
+                    "format": "int64",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "position": {
+                    "format": "int64",
+                    "type": "integer"
+                },
+                "readTimeout": {
+                    "format": "int32",
+                    "type": "integer"
+                },
+                "writeTimeout": {
+                    "format": "int32",
+                    "type": "integer"
+                }
+            }
+        },
+        "EntityTagHeaderValue": {
+            "type": "object",
+            "properties": {
+                "tag": {
+                    "$ref": "#/definitions/StringSegment",
+                    "readOnly": true
+                },
+                "isWeak": {
+                    "type": "boolean",
+                    "readOnly": true
+                }
+            }
+        },
+        "StringSegment": {
+            "type": "object",
+            "properties": {
+                "buffer": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "offset": {
+                    "format": "int32",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "length": {
+                    "format": "int32",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "value": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "hasValue": {
+                    "type": "boolean",
+                    "readOnly": true
+                }
+            }
+        },
+        "ObjectStorageDeleteRequest": {
+            "type": "object",
+            "properties": {
+                "objectId": {
+                    "description": "ObjectId of the file",
+                    "type": "string"
+                },
+                "model": {
+                    "description": "Model (e.g. abb.ability.device)",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "Exact path of the file (e.g. /foo/bar/file.bak)",
+                    "type": "string"
+                }
+            }
+        },
+        "IFormFile": {
+            "type": "object",
+            "properties": {
+                "contentType": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "contentDisposition": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "headers": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "readOnly": true
+                },
+                "length": {
+                    "format": "int64",
+                    "type": "integer",
+                    "readOnly": true
+                },
+                "name": {
+                    "type": "string",
+                    "readOnly": true
+                },
+                "fileName": {
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
+        "FileServiceResponse[GlobalStorageFileResponse]": {
+            "type": "object",
+            "properties": {
+                "hasMore": {
+                    "type": "boolean"
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/GlobalStorageFileResponse"
+                    }
+                }
+            }
+        },
+        "GlobalStorageFileResponse": {
+            "type": "object",
+            "properties": {
+                "timestamp": {
+                    "type": "string"
+                },
+                "size": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "GlobalStorageDownloadRequest": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "description": "Exact path of the file (e.g. /foo/bar/file.bak)",
+                    "type": "string"
+                }
+            }
+        },
+        "GlobalStorageDeleteRequest": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "description": "Exact path of the file (e.g. /foo/bar/file.bak)",
+                    "type": "string"
+                }
+            }
+        },
+        "PublisherRequest": {
+            "type": "object",
+            "properties": {
+                "sasTokenTTL": {
+                    "format": "int32",
+                    "description": "This property sets the sas token time to live.  The sas token will expire after this property's \r\nvalue has been exceeded.",
+                    "type": "integer"
+                }
+            }
+        },
+        "PublisherServiceResponse": {
+            "type": "object",
+            "properties": {
+                "sasToken": {
+                    "type": "string"
+                },
+                "connectionUrl": {
+                    "type": "string",
+                    "readOnly": true
+                }
+            }
+        },
+        "PublisherDetailsResponse": {
+            "type": "object",
+            "properties": {
+                "connectionUrl": {
+                    "type": "string"
+                },
+                "isRevoked": {
+                    "type": "boolean"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreateSubscriptionRequest": {
+            "type": "object",
+            "properties": {
+                "subscriptionTTL": {
+                    "format": "int32",
+                    "description": "This property sets the time to live of the service bus subscription.  Take note that the time to \r\nlive is measured in idle client connections which means if the service bus subscription has no client \r\nconnections to it for this property value's amount of time, then it will be deleted.",
+                    "type": "integer"
+                },
+                "filter": {
+                    "description": "This property contains the filter request options.",
+                    "type": "string"
+                },
+                "sasTokenTTL": {
+                    "format": "int32",
+                    "description": "This property sets the sas token time to live.  The sas token will expire after this property's \r\nvalue has been exceeded.",
+                    "type": "integer"
+                }
+            }
+        },
+        "SubscriptionResponse": {
+            "type": "object",
+            "properties": {
+                "subscriptionId": {
+                    "description": "The name of the created service bus subscription",
+                    "type": "string"
+                },
+                "sasToken": {
+                    "description": "The SAS Token is used to create a client connection to the service bus subscription",
+                    "type": "string"
+                },
+                "connectionUrl": {
+                    "description": "The namespace is the fully qualified Azure service bus namespace",
+                    "type": "string"
+                }
+            }
+        },
+        "SubscriptionRequest": {
+            "type": "object",
+            "properties": {
+                "sasTokenTTL": {
+                    "format": "int32",
+                    "description": "This property sets the sas token time to live.  The sas token will expire after this property's \r\nvalue has been exceeded.",
+                    "type": "integer"
+                }
+            }
+        },
+        "SubscriptionUpdateResponse": {
+            "type": "object",
+            "properties": {
+                "sasToken": {
+                    "description": "The SAS Token is used to create a client connection to the service bus subscription",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

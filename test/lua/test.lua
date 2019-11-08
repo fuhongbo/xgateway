@@ -1,0 +1,3 @@
+require("curl")
+
+print("hello")

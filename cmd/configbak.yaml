@@ -1,0 +1,93 @@
+port: 8000
+readTimeout: 5
+writeTimeout: 10
+routes:
+  - route: test
+    loadBalanceModel: RoundRobin
+#    loadBalanceKey: |
+#      @bind
+#      request.RemoteAddr
+    processPlugin:
+      inBound:
+#        - actionType: authBasic
+#          properties:
+#            userName: fu
+#            password: "123"
+        - actionType: setVariable
+          properties:
+            name: hello
+            value: |
+              @run
+              hello = requestGet('request.Header.appid');
+        - actionType: rateLimit
+          properties:
+            calls: 3000
+            timePeriod: 1
+            counterKey: |
+              @bind
+              request.Form.test
+        - actionType: ipFilter
+          properties:
+            action: "allow"
+            address: "192.168.10.135"
+        - actionType: jwt
+          properties:
+            type: "RS"
+            method: "RS256"
+            kid: "wRd6yReAJh9mbhpKJOPMtA76xpQ"
+            publicKey: {
+              "wRd6yReAJh9mbhpKJOPMtA76xpQ":"-----BEGIN CERTIFICATE-----\nMIIDDzCCAfegAwIBAgIQT65UBoMqsYROZFcZWgTZADANBgkqhkiG9w0BAQsFADAyMTAwLgYDVQQDEydhY2NvdW50cy5hY2Nlc3Njb250cm9sLmNoaW5hY2xvdWRhcGkuY24wHhcNMTkwOTE1MDAwMDAwWhcNMjQwOTE0MDAwMDAwWjAyMTAwLgYDVQQDEydhY2NvdW50cy5hY2Nlc3Njb250cm9sLmNoaW5hY2xvdWRhcGkuY24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC670YLZ193tU0+MbF46n7aTGg8zxCjfww3aUow36MYgk76snCBLwEn7K61cALCVry8G1Cy2ijhvg/yEx0QElPccOFv3C/vY72m+s52BIEZcpq+PHIhy0mt0OO28wPZ2Q9BkQmPKtJo7YuFnDXO5LWuTuVDu7XnjsCsB3EHqeJXGmQ1F9IleVZ4SMio/J0+rErqiaQlIig3qro11/FIcku0jLZ27fO3N3ZPEOT7cp3m93Z20ssqDdmmtJRBCtE/aNfVTZOp44UGA10Xs3sp2/cBfQMseb1LItgnM4gKDbjx5GsMJ55hzm2yDDZ05wY5eleyfIBwf+NJq3J9nM2laZ5/AgMBAAGjITAfMB0GA1UdDgQWBBS9WHjN/s7ZlUocwvxD0lJ+elTo5DANBgkqhkiG9w0BAQsFAAOCAQEAup6F+snhwAqr8HnPp0B4SA8pyH63Veh5cca8zQ3z11EwooG8/ChGBJEfHALQzsxfHBemvWHbGKZPZygBQb0iyEFe4z7+pIFHzYMA2VaBLsV9Fh/fKdrnTCFcDtq4vByJdm1Mc13RIN9Sb63qT0BbgFF9hgJyOrFf2SrAhO7IdFPVXp8EFZimzLLC0fZwT50hQje9zJ0xMpYT+yd/Rwa67BJ64lXByDDKyJ1ahgHT2cz9UUThE/Joj20E5+RChgtYpuIhHzp0hyvvBqjD9byzEwMXIY+0dsSReuLtmYvcXeaQ0fBfEsqdNqyebOZ2QDbOPVu+daRLDjjKBNAR/mnA6A==\n-----END CERTIFICATE-----",
+              "zjguyn-z7640CN4zOchS9XWmvfQ":"-----BEGIN CERTIFICATE-----\nMIIDDzCCAfegAwIBAgIQLDvhDyFcpppJNFJkprXiVzANBgkqhkiG9w0BAQsFADAyMTAwLgYDVQQDEydhY2NvdW50cy5hY2Nlc3Njb250cm9sLmNoaW5hY2xvdWRhcGkuY24wHhcNMTkxMDI2MDAwMDAwWhcNMjQxMDI1MDAwMDAwWjAyMTAwLgYDVQQDEydhY2NvdW50cy5hY2Nlc3Njb250cm9sLmNoaW5hY2xvdWRhcGkuY24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCRJ3PFTvMKIG5Kjo1SYwwWGJAIbRBgHIm68c4z3RLx7oKYhfcvh4ms2ZFUl8qCQY87rjVgoMRA7RjzaG2yUwYioHydZxTu5MRBH4TPlAspjPBoLtc2ZshxjlfreNpDftbRQ00n9yTmWZHWcuwToW36UOiROYWiI18Gghq03KQo6iGQneAJgHcynNpDVrEnIMOkeHMG3JeFVzaNYz4Dwxz2d9txUzw2KiyE5EkaDkOAi21rlms+6N78hnnJWP13gJCFKFHYrZYLoixC1cv+ntOSAmw80fisjPfGkTckUiKFjCkeZQU/wSyMGJ2/CZosV4wIM+gE2hmd+IPq7O5DLLeTAgMBAAGjITAfMB0GA1UdDgQWBBSMtoJXcjnjaYA0acqkz4nivbvcKzANBgkqhkiG9w0BAQsFAAOCAQEADU85Y3ZAMhf6o7cRn3jYIBr0HOej5dRldZ7F+oLS/7lj25c0d1aqDWKpJIjvpn6XKb+vN/UQ6SVI76/5V62vmT2C8ffUIuFi1LELJ25acYXW/HnvCF/sjaQtj/5z5QJXZyd8HSpmKCliXiFCNF2c9dEMke7XX4yVcJKesg6L7NUpSZqrNeNVYDfr9fc0yO5uVAM3gk9/sl5489Pki5OwgalXxXxZ2njac07HcD2CsJd9sU6hE1PEJnis4OhnYEv9f8VzXtw2gEyDpEvxVnnc+1MFbTewtjJq8gFUDOUlxeBG6pfZTtKH9dmMnDLRk3M0e0AcF8rHgrM7FHI4J1Dmeg==\n-----END CERTIFICATE-----"
+            }
+            verify: {
+              "iss":["https://sts.chinacloudapi.cn/29b69d29-ea6c-43e6-8cda-edbc0a5bbee0/"],
+              "appid": ["95226072-6057-45f0-8cc7-a867656e76d1"]
+            }
+        - actionType: request
+          properties:
+              identification: r1
+              url: http://localhost:8005/test
+              method: POST
+              header:
+                Authorization: "@run Authorization = requestGet('request.Header.Authorization'); "
+                X-Service-ID: "xgateway"
+                Content-Type: "application/json"
+              body: |
+                @run
+                var body = {};
+                body.appid = requestGet("request.Header.appid");
+                body.path = requestGet("request.RequestURI");
+                body.user = "user1";
+              timeout: 10
+        - actionType: assertion
+          properties:
+              action: |
+                @run
+                assertion={};
+                if(r1.Response.status==404){
+                    assertion.result=false;
+                    assertion.data="网络请求地址配置错误"+hello;
+                    assertion.status=500;
+                }
+                else
+                {
+                    bd=requestGet("request.Body");
+                    bodySet(bd+"xxx");
+                    assertion.result=true;
+                }
+
+      outBound:
+      errorBound:
+    swagger: ""
+    checkHealthURL: "/health"
+    healthCheck: true
+    healthLimitTimeWindow: 60
+    healthLimitCount: 3
+    checkTicket: 10
+    requestLimitTimeWindow: 10
+    requestLimitCount: 3000
+    endpoints:
+      - http://127.0.0.1:8001
+      - http://127.0.0.1:8002
+#      - http://127.0.0.1:8003
+#      - http://127.0.0.1:8004

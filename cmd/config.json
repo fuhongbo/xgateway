@@ -1,0 +1,38 @@
+{
+  "routes":
+  [
+    {
+      "route" : "/test",
+      "loadBalanceModel": "roundRobin",
+      "processPlugin":{
+        "inBound": [
+          {"actionType": "authBasic","properties": {"userName": "fu","password": "123"}},
+          {"actionType": "setVariable","properties": {"name": "hello","value": "@(hello = variableGet('mm');)"}},
+          {"actionType": "request","properties":{"url": "","method":"post","header":{},"body": {},"timeOut":20,"setResponseTo": "responseBody","setStatusTo": "responseStatus"}},
+          {"actionType": "rateLimit","Properties": {"calls": 30,"timePeriod": 60,"counterKey":"{{context.Request.IpAddress}}"}},
+          {"actionType": "ipFilter","Properties": {"action":"","addressFrom": "","addressTo": ""}}
+        ],
+        "outBound": [],
+        "errorBound": []
+      },
+      "swagger": "",
+      "checkHealthURL": "/health",
+      "healthCheck": true,
+      "healthLimitTimeWindow": 60,
+      "healthLimitCount": 3,
+      "checkTicket": 10,
+      "requestLimitTimeWindow": 10,
+      "requestLimitCount": 3000,
+      "endpoints" : [
+        "http://127.0.0.1:8001",
+        "http://127.0.0.1:8002",
+        "http://127.0.0.1:8003",
+        "http://127.0.0.1:8004"
+      ]
+    }
+  ],
+  "port" : "8000",
+  "readTimeout":5,
+  "writeTimeout":10
+
+}
